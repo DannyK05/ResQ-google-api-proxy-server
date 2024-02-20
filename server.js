@@ -10,7 +10,8 @@ app.use(cors());
 // Define your route to proxy requests to the Google Maps API
 app.get('/maps/api/place/nearbysearch/json', async (req, res) => {
     try {
-        const { location, radius, type, key } = req.query;
+        const { location, radius, type } = req.query;
+        const apiKey = req.query.key; // Retrieve API key from request parameters
         const apiUrl = `https://maps.googleapis.com/maps/api/place/nearbysearch/json`;
 
         const response = await axios.get(apiUrl, {
@@ -18,17 +19,17 @@ app.get('/maps/api/place/nearbysearch/json', async (req, res) => {
                 location,
                 radius,
                 type,
-                key
+                key: apiKey // Include API key in the request to Google Maps API
             }
         });
 
-        // Forward the response from the Google Maps API to the client
         res.json(response.data);
     } catch (error) {
         console.error('Error proxying request:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
 });
+
 
 // Start the server
 const PORT = process.env.PORT || 3000;
