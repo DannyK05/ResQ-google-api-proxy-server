@@ -4,11 +4,13 @@ const app = express();
 
 // Enable CORS 
 app.use((req, res, next) => {
-    const allowedOrigins = ['https://res-q.vercel.app', 'https://res-q.vercel.app/home', 'https://res-q.vercel.app/map']; // Add more pages if needed
+    // Set the allowed origin to your Vercel frontend domain
+    const allowedOrigin = 'https://res-q.vercel.app';
 
-    const origin = req.headers.origin;
-    if (allowedOrigins.includes(origin)) {
-        res.setHeader('Access-Control-Allow-Origin', origin);
+    // Check if the request origin matches the allowed origin
+    const requestOrigin = req.headers.origin;
+    if (requestOrigin && requestOrigin === allowedOrigin) {
+        res.setHeader('Access-Control-Allow-Origin', requestOrigin);
     }
 
     // Allow other headers to be sent
