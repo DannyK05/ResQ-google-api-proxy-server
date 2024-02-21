@@ -2,34 +2,11 @@ const express = require('express');
 const axios = require('axios');
 const app = express();
 
-// Enable CORS 
-const allowedOrigin = 'https://res-q.vercel.app';
 
 app.use((req, res, next) => {
-    // Allow preflight requests
-    if (req.method === 'OPTIONS') {
-        res.header('Access-Control-Allow-Origin', allowedOrigin);
-        res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-        res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-        res.header('Access-Control-Allow-Credentials', true);
-        return res.status(200).json({});
-    }
-
-    // Set the allowed origin if it matches
-    const requestOrigin = req.headers.origin;
-    if (requestOrigin && requestOrigin === allowedOrigin) {
-        res.setHeader('Access-Control-Allow-Origin', requestOrigin);
-    }
-
-    // Allow other headers to be sent
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-
-    // Allow all HTTP methods
+    res.header('Access-Control-Allow-Origin', 'https://res-q.vercel.app');
     res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-
-    // Allow credentials
-    res.header('Access-Control-Allow-Credentials', true);
-
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     next();
 });
 
