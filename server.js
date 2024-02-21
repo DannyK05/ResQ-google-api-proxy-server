@@ -2,11 +2,27 @@ const express = require('express');
 const axios = require('axios');
 const app = express();
 
-// Enable CORS for all routes
+// Enable CORS 
 app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
+    const allowedOrigins = ['https://res-q.vercel.app', 'https://res-q.vercel.app/home', 'https://res-q.vercel.app/map']; // Add more pages if needed
+
+    const origin = req.headers.origin;
+    if (allowedOrigins.includes(origin)) {
+        res.setHeader('Access-Control-Allow-Origin', origin);
+    }
+
+    // Allow other headers to be sent
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+
+    // Allow all HTTP methods
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+
+    // Allow credentials
+    res.header('Access-Control-Allow-Credentials', true);
+
     next();
 });
+
 
 // Define your route to proxy requests to the Google Maps API
 app.get('/maps/api/place/nearbysearch/json', async (req, res) => {
@@ -67,6 +83,27 @@ app.get('/call-closest-hospital', async (req, res) => {
     }
 });
 
+// for the map feature of ResQ
+    app.get('/fetch-nearby-hospitals', async (req, res) => {
+    try {
+        const { lat, lng } = req.query;
+
+        // Make API request to fetch nearby hospitals
+        const response = await axios.get(`https://maps.googleapis.com/maps/api/place/nearbysearch/json`, {
+            params: {
+                location: `${lat},${lng}`,
+                radius: 1500,
+                type: 'hospital',
+                key: 'AIzaSyA-eimkkqp9OSHxHlKuScXbyz9Cr-dgqf0'
+            }
+        });
+
+        res.json(response.data);
+    } catch (error) {
+        console.error('Error fetching nearby hospitals:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
 
 // Start the server
 const PORT = process.env.PORT || 3001;
