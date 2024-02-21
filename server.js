@@ -3,11 +3,19 @@ const axios = require('axios');
 const app = express();
 
 // Enable CORS 
-app.use((req, res, next) => {
-    // Set the allowed origin to your Vercel frontend domain
-    const allowedOrigin = 'https://res-q.vercel.app';
+const allowedOrigin = 'https://res-q.vercel.app';
 
-    // Check if the request origin matches the allowed origin
+app.use((req, res, next) => {
+    // Allow preflight requests
+    if (req.method === 'OPTIONS') {
+        res.header('Access-Control-Allow-Origin', allowedOrigin);
+        res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+        res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+        res.header('Access-Control-Allow-Credentials', true);
+        return res.status(200).json({});
+    }
+
+    // Set the allowed origin if it matches
     const requestOrigin = req.headers.origin;
     if (requestOrigin && requestOrigin === allowedOrigin) {
         res.setHeader('Access-Control-Allow-Origin', requestOrigin);
@@ -24,6 +32,7 @@ app.use((req, res, next) => {
 
     next();
 });
+
 
 
 // Define your route to proxy requests to the Google Maps API
