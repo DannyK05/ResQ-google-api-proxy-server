@@ -32,10 +32,10 @@ app.get('/maps/api/place/nearbysearch/json', async (req, res) => {
 
 
 // Start the server
-const PORT = process.env.PORT || 3000;
-const HOST = '0.0.0.0'; // This listens on all available network interfaces
+const PORT = process.env.PORT || 3001;
+ // This listens on all available network interfaces
 
-app.listen(PORT, HOST, () => {
-    console.log(`Server is running on http://${HOST}:${PORT}`);
+app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
 });
 
