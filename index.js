@@ -45,7 +45,7 @@ app.get('/call-closest-hospital', async (req, res) => {
         const response = await axios.get('https://maps.googleapis.com/maps/api/place/nearbysearch/json', {
             params: {
                 location: userLocation, // Assuming userLocation is in the format 'latitude,longitude'
-                radius: 1500,
+                radius: 10000,
                 type: 'hospital',
                 key: 'AIzaSyA-eimkkqp9OSHxHlKuScXbyz9Cr-dgqf0'
             }
